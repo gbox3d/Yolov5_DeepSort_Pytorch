@@ -98,8 +98,9 @@ def detect(opt, save_img=False):
         cudnn.benchmark = True  # set True to speed up constant image size inference
         dataset = LoadStreams(source, img_size=imgsz)
     else:
-        view_img = True
-        save_img = True
+        # view_img = True
+        if opt.not_save_img == False:
+            save_img = True
         dataset = LoadImages(source, img_size=imgsz)
 
     # Get names and colors
@@ -243,6 +244,8 @@ if __name__ == '__main__':
     parser.add_argument('--device', default='',
                         help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--view-img', action='store_true',
+                        help='display results')
+    parser.add_argument('--not-save-img', action='store_true',
                         help='display results')
     parser.add_argument('--save-txt', action='store_true',
                         help='save results to *.txt')
