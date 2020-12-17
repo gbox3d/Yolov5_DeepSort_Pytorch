@@ -1,4 +1,4 @@
-# %%
+# %% display video frame
 import sys
 sys.path.append('./yolov5')
 
@@ -18,32 +18,25 @@ import torch
 import torch.backends.cudnn as cudnn
 
 
+
+from IPython.display import display
+import PIL.ImageFont as ImageFont
+import PIL.ImageDraw as ImageDraw
+import PIL.ImageColor as ImageColor
+import PIL.Image as Image
+
+
 print('load module ok')
 
 
-#%% initialize deepsort
-config_deepsort = 'deep_sort_pytorch/configs/deep_sort.yaml'
-cfg = get_config()
-cfg.merge_from_file(config_deepsort)
+#%%load dataset
+imgsz = 640
+dataset = LoadImages('data/test.mp4', img_size=imgsz)
 
-print(cfg)
+for frame_idx, (path, img, im0s, vid_cap) in enumerate(dataset):
+    print( '\n' )
+    print(f' frame index : {frame_idx} \n')
+    display( Image.fromarray(cv2.cvtColor(im0s,cv2.COLOR_BGR2RGB)))
+    if frame_idx >= 1 :
+        break;
 
-# deepsort = DeepSort(cfg.DEEPSORT.REID_CKPT,
-#                     max_dist=cfg.DEEPSORT.MAX_DIST, min_confidence=cfg.DEEPSORT.MIN_CONFIDENCE,
-#                     nms_max_overlap=cfg.DEEPSORT.NMS_MAX_OVERLAP, max_iou_distance=cfg.DEEPSORT.MAX_IOU_DISTANCE,
-#                     max_age=cfg.DEEPSORT.MAX_AGE, n_init=cfg.DEEPSORT.N_INIT, nn_budget=cfg.DEEPSORT.NN_BUDGET,
-#                     use_cuda=True)
-
-# %%s
-out = 'inference/output'
-device = select_device('')
-
-if os.path.exists(out):
-    shutil.rmtree(out)  # delete output folder
-os.makedirs(out)  # make new output folder
-
-half = device.type != 'cpu'  # half precision only supported on CUDA
-
-print(device)
-
-# %%
